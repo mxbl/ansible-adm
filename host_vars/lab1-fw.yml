@@ -1,0 +1,5 @@
+---
+wan_interface_mac: "bc:24:11:a7:a2:7b"
+lan_interface_mac: "bc:24:11:60:25:85"
+requirements:
+  - iptables

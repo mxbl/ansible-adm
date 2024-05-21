@@ -1,0 +1,61 @@
+#!/bin/sh
+# {{ ansible_managed }}
+
+PATH='/sbin'
+
+# Init
+iptables -F        # flush all chains
+iptables -X        # delete all empty chains
+iptables -Z        # zero the packet and byte counters in all chains
+iptables -t nat -F # flush nat table
+
+# Default policies
+iptables -P INPUT DROP
+iptables -P OUTPUT DROP
+iptables -P FORWARD DROP
+
+echo -n '1' > /proc/sys/net/ipv4/ip_forward
+echo -n '0' > /proc/sys/net/ipv4/conf/all/accept_source_route
+echo -n '0' > /proc/sys/net/ipv4/conf/all/accept_redirects
+echo -n '1' > /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts
+echo -n '1' > /proc/sys/net/ipv4/icmp_ignore_bogus_error_responses
+
+# Enable loopback traffic
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A OUTPUT -o lo -j ACCEPT
+
+# Enable statefull rules (after that, only need to allow new connections)
+iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+iptables -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+
+# Drop invalid state packets
+iptables -A INPUT -m conntrack --ctstate INVALID -j DROP
+iptables -A OUTPUT -m conntrack --ctstate INVALID -j DROP
+iptables -A FORWARD -m conntrack --ctstate INVALID -j DROP
+
+
+# INPUT
+
+# incoming ssh from the LAN
+# iptables -A INPUT -i lan0 -s 10.10.10.0/24 \
+#                   -p tcp --dport 22 -m conntrack --ctstate NEW -j ACCEPT
+
+
+# OUTPUT
+
+# Enable all outgoing traffic to WAN
+iptables -A OUTPUT -o wan0 -d 0.0.0.0/0 -j ACCEPT
+
+# Enable access traffic, from the firewall to the LAN network
+iptables -A OUTPUT -o lan0 -d 10.10.10.0/24 -j ACCEPT
+
+
+# FORWARD
+
+
+
+# LOGGING
+iptables -A INPUT   -j LOG --log-level debug --log-prefix 'FW INPUT]:   '
+iptables -A OUTPUT  -j LOG --log-level debug --log-prefix 'FW OUTPUT]:  '
+iptables -A FORWARD -j LOG --log-level debug --log-prefix 'FW FORWARD]: '

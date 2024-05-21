@@ -1,0 +1,8 @@
+# vim: ft=ansible
+---
+- name: Setup firewall
+  hosts: lab1-fw
+  gather_facts: true
+  roles:
+    - firewall
+    - low_level_network

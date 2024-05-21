@@ -1,0 +1,10 @@
+---
+low_level_network_packages:
+  # NOTE: net-tools got replaced by iproute2
+  - net-tools # netstat route arp
+  - whois
+  - bind9-dnsutils # dig
+  - mtr # like traceroute but repeatedly (with gui)
+  - traceroute
+  - iptables
+  - ethtool
