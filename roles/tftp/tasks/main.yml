@@ -1,0 +1,21 @@
+# vim: ft=ansible
+---
+- name: Install packages
+  ansible.builtin.apt:
+    pkg:
+      - tftpd-hpa
+    state: present
+
+- name: Make sure tftp root path exists
+  ansible.builtin.file:
+    path: "{{ tftp_root_path }}"
+    state: directory
+    mode: "0755"
+
+- name: Setup config and notify service
+  ansible.builtin.template:
+    src: tftpd-hpa.j2
+    dest: /etc/default/tftpd-hpa
+    mode: "0755"
+  notify:
+    - Restart tftpd-hpa
