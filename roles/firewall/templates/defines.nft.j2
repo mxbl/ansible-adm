@@ -1,0 +1,18 @@
+#!/usr/sbin/nft -f
+# {{ ansible_managed }}
+
+define NIC_LAN_NAME = "{{ lan_interface_name }}"
+define NIC_LAN_MAC = "{{ lan_interface_mac }}"
+define NIC_LAN_iP = "{{ lan_interface_ip }}"
+
+define NIC_WAN_NAME = "{{ wan_interface_name }}"
+define NIC_WAN_MAC = "{{ wan_interface_mac }}"
+define NIC_WAN_iP = "{{ wan_interface_ip }}"
+
+define NET_LAN = "{{ lan_network }}"
+define mxdesk_ipv4 = "192.168.2.38"
+
+define DNS_SERVERS = { {{ wan_gateway_ip }} }
+define DHCP_SERVER = "{{ wan_gateway_ip }}"
+
+# vim: ft=nftables

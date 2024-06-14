@@ -1,0 +1,40 @@
+#!/usr/sbin/nft -f
+# {{ ansible_managed }}
+
+flush ruleset
+
+include "./defines.nft"
+
+table ip global {
+    chain inbound_world {
+        # allow SSH connection from known host
+        ip saddr 192.168.2.38 tcp dport 22 accept
+    }
+
+    chain inbound_private_lan {
+    }
+
+    chain inbound {
+    }
+
+    chain forward {
+        type filter hook forward priority 0; policy drop;
+
+        # allow traffic from established and related packets, drop invalid
+        ct state vmap { established : accept, related : accept, invalid : drop }
+
+        # connections from the internal lan to external wan
+        meta iifname . meta oifname { $DEV_LAN . $DEV_WAN, $DEV_WAN . $DEV_LAN }
+
+        # the rest is dropped by the above policy
+    }
+
+    chain postrouting {
+        type nat hook postrouting priority 100; policy accept;
+
+        # masquerade private ip addresses
+        ip saddr $NET_LAN meta oifname $DEV_WAN counter masquerade
+    }
+}
+
+# vim: ft=nftables

@@ -1,5 +1,10 @@
 ---
+wan_interface_name: "wan0"
 wan_interface_mac: "bc:24:11:a7:a2:7b"
+wan_interface_ip: "192.168.2.220"
+wan_gateway_ip: "192.168.2.1"
+
+lan_interface_name: "lan0"
 lan_interface_mac: "bc:24:11:60:25:85"
-requirements:
-  - iptables
+lan_interface_ip: "10.10.10.1"
+lan_network: "10.10.10.0/24"
