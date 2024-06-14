@@ -1,0 +1,19 @@
+# vim: ft=ansible
+---
+- name: Setup tftp server
+  hosts: mxdesk
+  roles:
+    - tftp
+
+- name: Netboot
+  hosts: mxdesk
+  tasks:
+    - name: Download netboot debian installer image (amd64)
+      ansible.builtin.unarchive:
+        src: https://deb.debian.org/debian/dists/bookworm/main/installer-amd64/current/images/netboot/netboot.tar.gz
+        dest: "{{ tftp_root_path }}"
+        mode: "0755"
+        remote_src: true
+        extra_opts:
+          - "--add-file"
+          - "./debian-installer/amd64"
