@@ -8,3 +8,4 @@ low_level_network_packages:
   - traceroute
   - nftables # replaces iptables
   - ethtool
+  - nmap
