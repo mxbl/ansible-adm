@@ -6,3 +6,4 @@
   roles:
     - firewall
     - low_level_network
+    - openvpn

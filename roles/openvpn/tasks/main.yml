@@ -1,0 +1,7 @@
+# vim: ft=ansible
+---
+- name: Install required packages
+  ansible.builtin.apt:
+    pkg:
+      - openvpn
+    state: present
