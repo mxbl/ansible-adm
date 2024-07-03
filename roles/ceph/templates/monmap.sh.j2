@@ -1,0 +1,9 @@
+#!/bin/bash
+# {{ ansible_managed }}
+
+MONMAP=/etc/ceph/monmap
+
+monmaptool --create --fsid {{ cluster_fsid }} $MONMAP
+monmaptool --add ceph1 192.168.2.184 $MONMAP
+# monmaptool --add ceph2 192.168.2.185 $MONMAP
+# monmaptool --add ceph3 192.168.2.186 $MONMAP

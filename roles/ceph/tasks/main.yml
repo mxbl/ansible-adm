@@ -1,0 +1,53 @@
+# vim: ft=ansible
+---
+
+# - apt install ceph
+# - create needed directories
+# - setup ceph.conf
+# - copy shell scripts for keyring and monmap
+
+- name: Install ceph packages
+  ansible.builtin.apt:
+    pkg:
+      - ceph
+    state: present
+
+- name: Make sure needed directoies exist
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: ceph
+    group: ceph
+    mode: "0755"
+  with_items:
+    - /etc/ceph
+
+    # Default data directories on every host
+    - "/var/lib/ceph/mon/{{ cluster_name }}-ceph1"
+    - "/var/lib/ceph/mon/{{ cluster_name }}-ceph2"
+    - "/var/lib/ceph/mon/{{ cluster_name }}-ceph3"
+
+- name: Setup ceph.conf
+  ansible.builtin.template:
+    src: ceph.conf.j2
+    dest: "/etc/ceph/{{ cluster_name }}.conf"
+    owner: ceph
+    group: ceph
+    mode: "0755"
+
+- name: Copy keyring helper script to /etc/ceph
+  ansible.builtin.copy:
+    src: keyring.sh
+    dest: "/etc/ceph/keyring.sh"
+    mode: "0755"
+
+- name: Copp monmap script to /etc/ceph
+  ansible.builtin.template:
+    src: monmap.sh.j2
+    dest: "/etc/ceph/monmap.sh"
+    mode: "0755"
+
+# - name: Generate a monitor map
+#   ansible.builtin.command:
+#     cmd: monmaptool --create --fsid {{ cluster_fsid }} /tmp/monmap
+#   changed_when: false

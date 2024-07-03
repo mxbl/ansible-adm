@@ -1,0 +1,17 @@
+#!/bin/bash
+# {{ ansible_managed }}
+
+NODENAME=$(hostname -s)
+
+mkdir /var/lib/ceph/mgr/{{ cluster_name }}-$NODENAME
+
+# create auth key
+ceph auth get-ro-create mgr.$NODE_NAME mon 'allow profile mgr' osd 'allow *' mds 'allow *'
+ceph auth get-ro-create mgr.$NODE_NAME \
+    | tee /etc/ceph/ceph.mgr.admin.keyring
+cp /etc/ceph/ceph.mgr.admin.keyring /var/lib/ceph/mgr/{{ cluster_name }}-$NODENAME/keyring
+
+chown ceph:ceph /etc/ceph/ceph.mgr.admin.keyring
+chown -R ceph:ceph /var/lib/ceph/mgr/{{ cluster_name }}-$NODENAME
+
+systemctl enable --now ceph-mgr@$NODENAME

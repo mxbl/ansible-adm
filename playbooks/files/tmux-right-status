@@ -1,0 +1,35 @@
+#!/bin/bash
+# .tmux-right-status.sh
+# ---
+# Echo tmux right status prompt depending on clients window size.
+
+WIDTH=$(tmux display -p "#{client_width}")
+SMALL=80
+MEDIUM=120
+
+# Colors
+RED="#[fg=colour160]"
+PURPLE="#[fg=colour160]"
+NORMAL="#[fg=#555555]"
+
+if [ "$WIDTH" -gt "$MEDIUM" ]
+then
+  # messages
+  #echo -n ":${RED}$(tail -n1 .tmux-message)${NORMAL}"
+  # battery information
+  echo -n ":$(battery_info)"
+  # client pid
+  echo -n ":PID=$PURPLE#{client_pid}$NORMAL"
+  # socket path
+  echo -n ":#{socket_path}:"
+  # pane current path
+  echo -n "#[fg=#eeeeee,bold]#{pane_current_path}"
+elif [ "$WIDTH" -gt "$SMALL" ]
+then
+  # pane current path
+  echo -n "#[fg=colour116]#{pane_current_path}"
+fi
+
+# return nothing if the client window is below `SMALL` columns
+
+#vim:ft=bash

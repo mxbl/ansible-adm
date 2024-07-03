@@ -1,0 +1,41 @@
+" vim: set ft=vim et sts=4 sw=4 :
+
+if has('autocmd')
+    filetype plugin indent on
+endif
+if has('syntax') && !exists('g:syntax_on')
+    syntax enable
+endif
+
+nnoremap <expr> <CR> { -> v:hlsearch ? ":nohl\<CR>" : "\<CR>" }()
+
+" Allow color schemes to do bright colors without forcing bold.
+if &t_Co == 8 && $TERM !~# '^linux'
+    set t_Co=16
+endif 
+
+colorscheme elflord
+
+" do not increment 007 to 010 on CTRL-A
+set nrformats-=octal
+
+" allow backspace over autoindent, line breaks and start of insert
+set backspace=indent,eol,start
+
+set incsearch
+set hlsearch
+set autoindent
+set shiftwidth=4
+set softtabstop=4
+set expandtab
+set list
+set listchars=tab:⇑.
+set modeline
+set hidden 
+set undodir=~/.vimundo
+set undofile
+set undolevels=1000 "maximum number of changes that can be undone
+set undoreload=1000 "maximum number lines to save for undo on a buffer reload
+set showtabline=1
+set wildmenu 
+set wildmode=list:longest,list:full

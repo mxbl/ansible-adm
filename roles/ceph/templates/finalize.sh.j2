@@ -1,0 +1,19 @@
+#!/bin/bash
+# {{ ansible_managed }}
+
+NODENAME=$(hostname -s)
+
+# associate key and monmap to monitor daemon
+ceph-mon --cluster {{ cluster_name }} --mkfs -i $NODENAME \
+    --monmap /etc/ceph/monmap \
+    --keyring /etc/ceph/ceph.mon.keyring
+
+# chown -R ceph:ceph /etc/ceph/ceph.*
+# chown -R ceph:ceph /var/lib/ceph/mon/{{ cluster_name }}-$NODENAME
+chown -R ceph:ceph /var/lib/ceph/bootstrap-osd
+
+systemctl enable --now ceph-mon@$NODENAME
+
+# enable messenger v2 protocol
+ceph mon enable-msgr2
+ceph config set mon auth_allow_insecure_global_id_reclaim false

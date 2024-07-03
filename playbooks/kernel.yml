@@ -1,0 +1,19 @@
+# vim: ft=ansible
+---
+- name: Install latest kernel
+  hosts: all
+  tasks:
+    - name: Install build dependencies
+      ansible.builtin.apt:
+        pkg:
+          - git
+          - fakeroot
+          - build-essential
+          - ncurses-dev
+          - xz-utils
+          - libssl-dev
+          - bc
+          - flex
+          - libelf-dev
+          - bison
+        state: present

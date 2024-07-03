@@ -1,0 +1,11 @@
+# {{ ansible_managed }}
+
+[global]
+fsid = {{ cluster_fsid }}
+mon initial members = {{ cluster_mon_members }}
+mon host = {{ cluster_mon_ips }}
+public network = {{ public_network }}
+cluster network = {{ cluster_network }}
+auth cluster required = cephx
+auth service required = cephx
+auth client required = cephx

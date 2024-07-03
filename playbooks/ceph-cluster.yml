@@ -1,0 +1,17 @@
+# vim: ft=ansible
+---
+
+# Generate uuid with `uuidgen` (`apt install uuid-runtime`)
+
+- name: Setup ceph cluster nodes
+  hosts: ceph-cluster
+  gather_facts: true
+  vars:
+    cluster_name: "ceph"
+    cluster_fsid: "a8aad8fa-97ef-42af-b77c-4deb3b1f0330"
+    cluster_mon_members: "ceph1, ceph2, ceph3"
+    cluster_mon_ips: "192.168.2.184, 192.168.2.185, 192.168.2.186"
+    cluster_network: "192.168.3.0/24"
+    public_network: "192.168.2.0/24"
+  roles:
+    - ceph

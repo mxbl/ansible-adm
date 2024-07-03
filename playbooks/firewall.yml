@@ -7,3 +7,8 @@
     - firewall
     - low_level_network
     - openvpn
+
+- name: Setup Administrator machine
+  hosts: mxlap
+  roles:
+    - openvpn

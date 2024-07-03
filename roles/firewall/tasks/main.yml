@@ -23,10 +23,14 @@
     dest: "{{ item.dir }}{{ item.src | basename | regex_replace('\\.j2$', '') }}"
     mode: "{{ item.mode }}"
   with_items:
-    - { src: 10-persistent-wan.link.j2, dir: /etc/systemd/network/, mode: "0644" }
-    - { src: 10-persistent-lan.link.j2, dir: /etc/systemd/network/, mode: "0644" }
-    - { src: interfaces.j2, dir: /etc/network/, mode: "0644" }
-    - { src: defines.nft.j2, dir: /etc/firewall/, mode: "0644" }
+
+    # TODO: move, this is low level machine dependent setup
+    # - { src: 10-persistent-wan.link.j2, dir: /etc/systemd/network/, mode: "0644" }
+    # - { src: 10-persistent-lan.link.j2, dir: /etc/systemd/network/, mode: "0644" }
+    # - { src: interfaces.j2, dir: /etc/network/, mode: "0644" }
+    # - { src: defines.nft.j2, dir: /etc/firewall/, mode: "0644" }
+
+    # TODO: remove, this is old iptables setup
     # - { src: enable.sh.j2, dir: /etc/firewall/, mode: "0744" }
     # - { src: open.sh.j2, dir: /etc/firewall/, mode: "0744" }
     # - { src: firewall.service.j2, dir: /etc/systemd/system/, mode: "0644" }
