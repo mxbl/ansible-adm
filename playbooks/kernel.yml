@@ -16,4 +16,15 @@
           - flex
           - libelf-dev
           - bison
+          - dwarves
         state: present
+
+# - download and extract latest kernel
+# - copy current kernel config from /boot/config-$(uname -r) to .config in kernel source directory
+# - run menuconfig to adjust kernel configuration
+# - make
+# - make modules_install
+# - make install
+# - update-initramfs -c -k <new_version>
+# - update-grub
+# - reboot
