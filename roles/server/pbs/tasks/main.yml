@@ -1,0 +1,29 @@
+# vim: ft=ansible
+---
+
+# Role to set a base for a proxmox backup server.
+#
+# Steps:
+# - install requirements
+# - setup apt
+
+- name: Install requirements
+  ansible.builtin.apt:
+    pkg:
+      - gpg
+    state: present
+
+- name: SecureApt - install gpg key
+  ansible.builtin.apt_key:
+    url: https://enterprise.proxmox.com/debian/proxmox-release-bookworm.gpg
+    state: present
+
+- name: Setup pbs sources list
+  ansible.builtin.template:
+    src: pbs.list.j2
+    dest: /etc/apt/sources.list.d/pbs.list
+    mode: "0644"
+
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: true

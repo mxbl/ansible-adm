@@ -1,0 +1,4 @@
+- name: Setup proxmox backup server
+  hosts: pbs
+  roles:
+    - server/pbs
